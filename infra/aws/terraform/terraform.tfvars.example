@@ -1,0 +1,60 @@
+# -----------------------------------------------------------------------------
+# Shared Infrastructure Configuration
+# -----------------------------------------------------------------------------
+# Copy this file to terraform.tfvars and customize for your environment.
+# For CI/CD, set these values in the TERRAFORM_TFVARS GitHub secret.
+# -----------------------------------------------------------------------------
+
+# General
+company_prefix = "mycompany"  # Used as prefix for all resource names
+environment    = "dev"
+aws_region     = "us-east-1"
+
+# -----------------------------------------------------------------------------
+# Option 1: Create New Infrastructure (default)
+# -----------------------------------------------------------------------------
+
+create_vpc         = true
+create_ecs_cluster = true
+create_rds         = true
+
+# VPC Configuration
+vpc_cidr             = "10.0.0.0/16"
+availability_zones   = ["us-east-1a", "us-east-1b"]
+public_subnet_cidrs  = ["10.0.1.0/24", "10.0.2.0/24"]
+private_subnet_cidrs = ["10.0.10.0/24", "10.0.11.0/24"]
+enable_nat_gateway   = true
+single_nat_gateway   = true  # Set to false for HA in production
+
+# ECS Configuration
+ecs_cluster_name          = "shared"
+enable_container_insights = true
+
+# RDS Configuration
+rds_instance_class      = "db.t3.micro"
+rds_allocated_storage   = 20
+rds_engine_version      = "15.4"
+rds_database_name       = "appdb"
+rds_master_username     = "postgres"
+rds_multi_az            = false  # Set to true for production
+rds_skip_final_snapshot = true   # Set to false for production
+rds_deletion_protection = false  # Set to true for production
+
+# -----------------------------------------------------------------------------
+# Option 2: Use Existing Infrastructure
+# -----------------------------------------------------------------------------
+# Uncomment and configure these if you have existing infrastructure.
+# Set the corresponding create_* variable to false.
+
+# create_vpc = false
+# existing_vpc_id            = "vpc-xxxxxxxxx"
+# existing_public_subnet_ids = ["subnet-xxx", "subnet-yyy"]
+# existing_private_subnet_ids = ["subnet-aaa", "subnet-bbb"]
+
+# create_ecs_cluster = false
+# existing_ecs_cluster_arn = "arn:aws:ecs:us-east-1:123456789:cluster/my-cluster"
+
+# create_rds = false
+# existing_rds_endpoint          = "mydb.xxxx.us-east-1.rds.amazonaws.com:5432"
+# existing_rds_port              = 5432
+# existing_rds_security_group_id = "sg-xxxxxxxxx"
