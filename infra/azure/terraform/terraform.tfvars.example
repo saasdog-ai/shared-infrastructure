@@ -1,0 +1,31 @@
+# -----------------------------------------------------------------------------
+# Shared Infrastructure Configuration (Azure)
+# -----------------------------------------------------------------------------
+# Copy this file to terraform.tfvars and customize for your environment.
+# -----------------------------------------------------------------------------
+
+# General
+company_prefix = "mycompany"
+environment    = "dev"
+azure_location = "eastus"
+
+# VNet Configuration
+create_vnet                = true
+vnet_cidr                  = "10.0.0.0/16"
+public_subnet_cidr         = "10.0.1.0/24"
+private_subnet_cidr        = "10.0.10.0/24"
+container_apps_subnet_cidr = "10.0.16.0/23"
+enable_nat_gateway         = true
+
+# Container Apps Environment
+create_container_apps_environment = true
+
+# PostgreSQL Configuration
+create_postgresql              = true
+postgresql_sku                 = "B_Standard_B1ms"
+postgresql_storage_mb          = 32768
+postgresql_version             = "15"
+postgresql_database_name       = "appdb"
+postgresql_admin_username      = "postgres"
+postgresql_ha                  = false  # Set to true for production
+postgresql_geo_redundant_backup = false  # Set to true for production

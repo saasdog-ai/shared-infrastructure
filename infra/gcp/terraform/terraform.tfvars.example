@@ -1,0 +1,27 @@
+# -----------------------------------------------------------------------------
+# Shared Infrastructure Configuration (GCP)
+# -----------------------------------------------------------------------------
+# Copy this file to terraform.tfvars and customize for your environment.
+# -----------------------------------------------------------------------------
+
+# General
+company_prefix = "mycompany"
+environment    = "dev"
+gcp_project_id = "my-gcp-project-id"
+gcp_region     = "us-east1"
+
+# VPC Configuration
+create_vpc          = true
+public_subnet_cidr  = "10.0.1.0/24"
+private_subnet_cidr = "10.0.10.0/24"
+enable_nat          = true
+vpc_connector_cidr  = "10.0.100.0/28"
+
+# Cloud SQL Configuration
+create_cloud_sql              = true
+cloud_sql_tier                = "db-f1-micro"
+cloud_sql_disk_size           = 20
+cloud_sql_database_version    = "POSTGRES_15"
+cloud_sql_database_name       = "appdb"
+cloud_sql_ha                  = false  # Set to true for production
+cloud_sql_deletion_protection = false  # Set to true for production
