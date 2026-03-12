@@ -1,10 +1,12 @@
 # Shared Infrastructure
 
-Terraform configuration for shared AWS infrastructure used by multiple applications.
+Terraform configuration for shared AWS infrastructure used by [integration-platform](https://github.com/saasdog-ai/integration-platform) and [import-export-orchestrator](https://github.com/saasdog-ai/import-export-orchestrator).
 
 ## Overview
 
-This project deploys foundational infrastructure that is shared across applications:
+**This project is optional.** If you already have a VPC, ECS cluster, and RDS PostgreSQL instance, you can skip this entirely and point the application Terraform configs at your existing resources via `terraform.tfvars` (see [Using Your Own Infrastructure](#using-your-own-infrastructure) below).
+
+This project exists as a convenience for teams starting from scratch — it deploys foundational infrastructure in a single step:
 
 - **VPC** with public and private subnets across 2 AZs
 - **ECS Cluster** (Fargate) for container orchestration
@@ -113,6 +115,27 @@ Key outputs:
 | `rds_address` | RDS hostname only | DATABASE_URL |
 | `rds_security_group_id` | RDS security group | Application SG rules |
 | `rds_master_password_secret_arn` | Master password secret | DBA access |
+
+## Using Your Own Infrastructure
+
+If you already have a VPC, ECS cluster, and RDS instance, skip deploying this project entirely. Instead, fill in the application `terraform.tfvars` with your existing resource IDs:
+
+```hcl
+# integration-platform/infra/aws/terraform/terraform.tfvars
+# (same pattern for import-export-orchestrator)
+
+shared_vpc_id                         = "vpc-your-existing-vpc"
+shared_public_subnet_ids              = ["subnet-aaa", "subnet-bbb"]
+shared_private_subnet_ids             = ["subnet-ccc", "subnet-ddd"]
+shared_ecs_cluster_arn                = "arn:aws:ecs:us-east-1:123456789:cluster/your-cluster"
+shared_ecs_cluster_name               = "your-cluster"
+shared_rds_endpoint                   = "your-db.xxx.us-east-1.rds.amazonaws.com:5432"
+shared_rds_address                    = "your-db.xxx.us-east-1.rds.amazonaws.com"
+shared_rds_security_group_id          = "sg-your-rds-sg"
+shared_rds_master_password_secret_arn = "arn:aws:secretsmanager:us-east-1:123456789:secret:your-rds-password"
+```
+
+The application Terraform will create only application-specific resources (ALB, ECS service, SQS queue, KMS key, etc.) on top of your existing infrastructure.
 
 ## Applications Using This Infrastructure
 
